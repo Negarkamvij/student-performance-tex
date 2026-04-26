@@ -12,7 +12,7 @@
 \title{A Comparative Study of Linear, Tree-Based, and Neural Network Models for Student Performance Prediction}
 
 \author{
-Bhoami Khona, Negar Kamvij, and Siyi Liu\\
+Negar Kamvij, Bhoami Khona, and Siyi Liu\\
 CS 627
 }
 
@@ -35,10 +35,13 @@ The goal of this study is to compare these three models using the OULAD dataset.
 % --------------------------------------------------
 \section{Related Work}
 
-Machine learning has been widely applied in educational data mining.
+The application of machine learning in educational data mining has been widely studied for predicting student performance and engagement. Prior research demonstrates that machine learning models can effectively leverage demographic and academic data to identify patterns related to student outcomes \cite{chen2015}. These approaches have been shown to support early identification of at-risk students and improve decision-making in educational settings.
 
-Chen et al. show that machine learning models can identify patterns in student data and improve educational decision-making \cite{chen2024}. Chong et al. report that neural networks and ensemble methods outperform linear models in capturing complex behavior \cite{chong2025}. Sitompul et al. demonstrate that XGBoost achieves higher accuracy than Logistic Regression due to its ability to model nonlinear relationships \cite{sitompul2025}.
+Recent studies have expanded the use of advanced modeling techniques, particularly in online learning environments. Chong et al.~\cite{chong2025} highlight that ensemble methods and neural networks generally outperform traditional linear models by capturing complex, nonlinear relationships in student behavior data.
 
+Comparative studies in classification tasks further support the effectiveness of more complex models. Sitompul et al.~\cite{sitompul2025} find that tree-based models such as XGBoost consistently achieve higher predictive performance than logistic regression by modeling nonlinear patterns and feature interactions.
+
+Despite these developments, there remains a need for direct comparisons of linear, tree-based, and neural network models under a consistent experimental framework. This study addresses this gap by evaluating Logistic Regression, XGBoost, and a Neural Network (Multilayer Perceptron) on the same dataset, with a focus on understanding how model complexity influences predictive performance.
 % --------------------------------------------------
 \section{Methodology}
 
