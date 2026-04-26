@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999996 (TeX Live 2024) (preloaded format=xelatex 2024.10.20)  26 APR 2026 09:59
+This is XeTeX, Version 3.141592653-2.6-0.999996 (TeX Live 2024) (preloaded format=xelatex 2024.10.20)  26 APR 2026 10:46
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -295,35 +295,48 @@ LaTeX Font Warning: Font shape `TU/ptm/b/n' undefined
 LaTeX Font Warning: Font shape `TU/ptm/m/sc' undefined
 (Font)              using `TU/ptm/m/n' instead on input line 27.
 
-
-LaTeX Font Warning: Font shape `TU/ptm/b/n' undefined
-(Font)              using `TU/ptm/bx/n' instead on input line 38.
-
-
-LaTeX Warning: Citation `chen2015' on page 1 undefined on input line 38.
-
-LaTeX Font Info:    Trying to load font information for U+msa on input line 53.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 54.
 (/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 53.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 54.
  (/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
 
-]
-
-LaTeX Font Warning: Font shape `TU/ptm/b/n' undefined
-(Font)              using `TU/ptm/bx/n' instead on input line 81.
-
-
-LaTeX Font Warning: Font shape `TU/ptm/b/n' undefined
-(Font)              using `TU/ptm/bx/n' instead on input line 97.
+] [2]
+Overfull \hbox (1.1361pt too wide) in paragraph at lines 209--218
+ [][] 
+ []
 
 
-LaTeX Font Warning: Font shape `TU/ptm/b/n' undefined
-(Font)              using `TU/ptm/bx/n' instead on input line 121.
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+Underfull \hbox (badness 1776) in paragraph at lines 222--223
+[]\TU/ptm/m/sc/10 Logistic Regression shows the lowest performance
+ []
+
+[3] [4]
+Underfull \hbox (badness 10000) in paragraph at lines 285--286
+[]$[][][][][] [] [] [] [][][][][][][] [] [][][] [] [][][] [] [][][] [] [][][][][][][] [] [][][] [] [][][][] []
+ []
+
+
+Underfull \hbox (badness 1838) in paragraph at lines 335--338
+[]\TU/ptm/m/sc/8 J. Pesantez-Narvaez, M. Guillen, and M. Alcañiz, “Pre-
+ []
+
+
+Underfull \hbox (badness 5533) in paragraph at lines 340--342
+[]\TU/ptm/m/sc/8 “Predictive analytics for customer churn in the fash-
+ []
+
+
+Underfull \hbox (badness 1466) in paragraph at lines 340--342
+\TU/ptm/m/sc/8 of XGBoost and logistic regression,” 2023. :contentRefer-
+ []
 
 
 ** Conference Paper **
@@ -336,7 +349,9 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-[2] (./main.aux)
+[5
+
+] (./main.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-02-20>
@@ -345,17 +360,14 @@ L3 programming layer <2024-02-20>
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-
-LaTeX Warning: There were undefined references.
-
  ) 
 Here is how much of TeX's memory you used:
- 3150 strings out of 474773
- 51534 string characters out of 5757723
+ 3157 strings out of 474773
+ 51628 string characters out of 5757723
  1944839 words of memory out of 5000000
- 25298 multiletter control sequences out of 15000+600000
+ 25305 multiletter control sequences out of 15000+600000
  562948 words of font info for 66 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 57i,9n,65p,718b,256s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 57i,9n,65p,750b,256s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on main.pdf (2 pages).
+Output written on main.pdf (5 pages).
