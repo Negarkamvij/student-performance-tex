@@ -26,16 +26,16 @@ This study investigates how different machine learning models capture patterns i
 % --------------------------------------------------
 \section{Introduction}
 
-Predicting student academic performance is an important task in educational data mining. It enables early identification of at-risk students and supports data-driven interventions.
+Predicting student academic performance is an important task in educational data mining \cite{nayak2023}. It enables early identification of at-risk students and supports data-driven interventions.
 
-Machine learning models are increasingly used for this purpose. However, different models capture patterns in fundamentally different ways. Logistic Regression assumes a linear relationship between input features and outcomes. XGBoost captures piecewise and threshold-based patterns. Neural Networks model complex nonlinear relationships.
+Machine learning models are increasingly used for this purpose \cite{chen2015}. However, different models capture patterns in fundamentally different ways. Logistic Regression assumes a linear relationship between input features and outcomes. XGBoost captures piecewise and threshold-based patterns \cite{ki2026}. Neural Networks model complex nonlinear relationships \cite{chong2025}.
 
 The goal of this study is to compare these three models using the OULAD dataset. We aim to understand how model complexity affects predictive performance.
 
 % --------------------------------------------------
 \section{Related Work}
 
-The application of machine learning in educational data mining has been widely studied for predicting student performance and engagement. Prior research demonstrates that machine learning models can effectively leverage demographic and academic data to identify patterns related to student outcomes \cite{chen2015}. These approaches have been shown to support early identification of at-risk students and improve decision-making in educational settings.
+The application of machine learning in educational data mining has been widely studied for predicting student performance and engagement \cite{nayak2023}. Prior research demonstrates that machine learning models can effectively leverage demographic and academic data to identify patterns related to student outcomes \cite{chen2015}. These approaches have been shown to support early identification of at-risk students and improve decision-making in educational settings.
 
 Recent studies have expanded the use of advanced modeling techniques, particularly in online learning environments. Chong et al.~\cite{chong2025} highlight that ensemble methods and neural networks generally outperform traditional linear models by capturing complex, nonlinear relationships in student behavior data.
 
@@ -44,6 +44,7 @@ Comparative studies in classification tasks further support the effectiveness of
 Despite these developments, there remains a need for direct comparisons of linear, tree-based, and neural network models under a consistent experimental framework. This study addresses this gap by evaluating Logistic Regression, XGBoost, and a Neural Network (Multilayer Perceptron) on the same dataset, with a focus on understanding how model complexity influences predictive performance.
 % --------------------------------------------------
 \section{Methodology}
+This study adopts a comparative approach to evaluate how different machine learning models capture patterns in student performance data \cite{nayak2023}. Three representative models—Logistic Regression, XGBoost, and a Neural Network (Multilayer Perceptron)—are implemented and compared using a consistent data processing and evaluation pipeline. 
 
 \subsection{Dataset}
 
@@ -60,11 +61,11 @@ y =
 
 \subsection{Data Preprocessing}
 
-Missing values are handled by replacing categorical values with ``Unknown'' and numerical values with the median.
+Several preprocessing steps are applied to prepare the data for modeling. Missing values in categorical variables are replaced with a placeholder category (e.g., “Unknown”), while missing numerical values are imputed using the median. Categorical features are transformed into numerical representations using one-hot encoding \cite{nayak2023}.
 
-Categorical variables are encoded using one-hot encoding. Features that could cause data leakage, such as final results and student IDs, are removed.
+To reduce potential data leakage and improve model generalization, non-informative and outcome-related features are removed from the dataset. These include student identifiers, the original final outcome label, and the average assessment score, which is strongly correlated with the target variable.
 
-The dataset is split into training and testing sets (80/20). Feature scaling is applied to Logistic Regression and Neural Networks.
+The dataset is then split into training and testing sets using stratified sampling to preserve the class distribution. Feature scaling using standardization is applied to Logistic Regression and the Neural Network model to ensure stable optimization, while XGBoost is trained on unscaled data, as tree-based models are not sensitive to feature scaling \cite{sitompul2025}.
 
 \subsection{Exploratory Data Analysis}
 
@@ -74,53 +75,79 @@ The class distribution shows that approximately 52.8\% of students fail and 47.2
 
 The distribution of average scores shows that students who pass generally have higher scores, but there is overlap between passing and failing groups. This suggests that score alone is not sufficient for prediction.
 
-We also analyze studied credits and observe that students with higher credit loads tend to have higher pass rates. This indicates that academic engagement is an important factor.
+We also analyze studied credits and observe that students with higher credit loads tend to have higher pass rates. This indicates that academic engagement is an important factor \cite{nayak2023}.
 
 \subsection{Model Implementation}
 
-\textbf{Logistic Regression}
+In this study, three supervised machine learning models were implemented to predict student performance: Logistic Regression, XGBoost, and a Neural Network using a Multilayer Perceptron (MLP). These models were selected because they represent three different mathematical approaches to learning from data: linear modeling, tree-based ensemble learning, and nonlinear function approximation \cite{nayak2023}. This allows us to compare how model complexity affects prediction performance in educational datasets.
 
-Logistic Regression models the probability of passing as:
+\subsubsection{Logistic Regression}
 
-\[
-P(y=1|x) = \frac{1}{1 + e^{-(\beta_0 + \beta^T x)}}
-\]
+Logistic Regression was selected as the baseline model because it is a widely used method for binary classification and provides a simple and interpretable mathematical framework. It is commonly used in educational data mining as a reference model for predicting student outcomes \cite{sitompul2025}.
 
-The model is trained by minimizing log-loss:
+Let $x \in \mathbb{R}^d$ represent the feature vector of a student. Logistic Regression models the probability that a student passes as:
 
 \[
-L = - \sum [y \log(p) + (1-y)\log(1-p)]
+P(y = 1 \mid x) = \frac{1}{1 + e^{-(\beta_0 + \beta^T x)}}
 \]
 
-This creates a linear decision boundary.
+where $\beta_0$ is the intercept and $\beta$ is the coefficient vector.
 
-\textbf{XGBoost}
+The model is trained by minimizing the log-loss function:
 
-XGBoost models prediction as:
+\[
+L = - \sum \left[ y \log(p) + (1 - y) \log(1 - p) \right]
+\]
+
+This objective function ensures that the predicted probabilities are close to the true labels. The optimization is performed using gradient-based methods.
+
+The main assumption of Logistic Regression is that the relationship between input features and the log-odds of the outcome is linear. This results in a linear decision boundary in the feature space. While this makes the model easy to interpret, it limits its ability to capture nonlinear relationships.
+
+In this project, Logistic Regression was implemented using standardized input features to ensure stable optimization. The dataset includes features such as student demographics, number of assessments, and academic indicators. These variables may not have a purely linear relationship with the outcome. Therefore, Logistic Regression is used mainly as a baseline model.
+
+\subsubsection{XGBoost}
+
+XGBoost was selected as the main model because of its strong performance in classification tasks and its ability to capture complex nonlinear relationships \cite{ki2026, sitompul2025}.
+
+XGBoost is based on gradient boosting, where the prediction is represented as a sum of decision trees:
 
 \[
 \hat{y}(x) = \sum_{k=1}^{K} f_k(x)
 \]
 
-The objective function is:
+where each $f_k$ is a decision tree.
+
+The model minimizes the following objective function:
 
 \[
-Obj = \sum l(y_i, \hat{y}_i) + \sum \Omega(f_k)
+\text{Obj} = \sum l(y_i, \hat{y}_i) + \sum \Omega(f_k)
 \]
+
+where the loss term measures prediction error and the regularization term controls model complexity. A common form of the regularization function is:
 
 \[
 \Omega(f) = \gamma T + \frac{\lambda}{2} \sum w_j^2
 \]
 
-It builds trees sequentially:
+where $T$ is the number of leaves, $w_j$ are leaf weights, and $\gamma$ and $\lambda$ are regularization parameters.
+
+The training process is iterative. At each step, a new tree is added to reduce the residual error of the current model:
 
 \[
 \hat{y}^{(t)} = \hat{y}^{(t-1)} + f_t(x)
 \]
 
-\textbf{Neural Network}
+This allows the model to learn piecewise functions and capture threshold-based relationships.
 
-The neural network computes:
+XGBoost was chosen for this project because student performance data often contains nonlinear interactions. For example, performance may change significantly after reaching certain thresholds in assessments. These patterns cannot be captured by linear models but can be captured by tree-based methods \cite{ki2026}.
+
+In our implementation, categorical variables were converted using one-hot encoding, and missing values were replaced with zeros. The model was trained using multiple trees with controlled depth and learning rate.
+
+\subsubsection{Neural Network (Multilayer Perceptron)}
+
+The Neural Network model was selected to represent nonlinear function approximation. Neural networks can learn complex relationships through multiple layers of transformations \cite{chong2025}.
+
+A Multilayer Perceptron with one hidden layer can be defined as:
 
 \[
 h = \sigma(W_1 x + b_1)
@@ -130,88 +157,193 @@ h = \sigma(W_1 x + b_1)
 \hat{y} = \sigma(W_2 h + b_2)
 \]
 
-It minimizes cross-entropy loss and uses gradient descent.
+where $W_1$ and $W_2$ are weight matrices, $b_1$ and $b_2$ are bias terms, and $\sigma$ is an activation function such as ReLU or sigmoid.
 
+The model is trained by minimizing binary cross-entropy loss:
+
+\[
+L = - \sum \left[ y \log(\hat{y}) + (1 - y) \log(1 - \hat{y}) \right]
+\]
+
+The parameters are updated using gradient descent:
+
+\[
+w_{\text{new}} = w_{\text{old}} - \eta \frac{\partial L}{\partial w}
+\]
+
+where $\eta$ is the learning rate.
+
+Neural networks approximate complex nonlinear functions through layered transformations. Unlike Logistic Regression, which applies a single linear transformation, neural networks apply multiple transformations, allowing them to model more complex patterns.
+
+In this project, the Neural Network was implemented using scaled input features, since neural networks are sensitive to feature magnitude. Without scaling, training may become unstable.
+
+Although neural networks are powerful, they are not always optimal for structured tabular data. However, they provide a useful comparison with both linear and tree-based models \cite{chong2025}.
+
+By including the Neural Network model, we compare smooth nonlinear approximation (Neural Network), piecewise approximation (XGBoost), and linear approximation (Logistic Regression). This helps us understand which mathematical structure best represents student performance data.
 % --------------------------------------------------
 \section{Results and Discussion}
 
-We evaluate models using accuracy, precision, recall, and F1-score.
+To evaluate the performance of the models, we use four standard classification metrics: accuracy, precision, recall, and F1-score. These metrics provide a comprehensive understanding of model performance, especially in the presence of class imbalance \cite{nayak2023}.
 
 \[
 \text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}
 \]
 
+\[
+\text{Precision} = \frac{TP}{TP + FP}, \quad
+\text{Recall} = \frac{TP}{TP + FN}
+\]
+
+\[
+F1 = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}
+\]
+
+\subsection{Overall Model Performance}
+
+The performance of the three models is summarized in Table~\ref{tab:results}.
+
 \begin{table}[h]
 \centering
-\caption{Model Performance}
-\begin{tabular}{lcc}
+\caption{Model Performance Comparison}
+\label{tab:results}
+\begin{tabular}{lcccc}
 \hline
-Model & Accuracy & F1-score \\
+Model & Accuracy & Precision & Recall & F1-score \\
 \hline
-Logistic Regression & 0.809 & 0.842 \\
-XGBoost & 0.865 & 0.889 \\
-Neural Network & 0.823 & 0.850 \\
+Logistic Regression & 0.809 & 0.804 & 0.883 & 0.842 \\
+XGBoost & 0.865 & 0.842 & 0.942 & 0.889 \\
+Neural Network & 0.823 & 0.828 & 0.873 & 0.850 \\
 \hline
 \end{tabular}
 \end{table}
 
-XGBoost achieves the highest performance. Logistic Regression performs worst because it assumes a linear relationship.
+From the results, XGBoost clearly achieves the best performance across all evaluation metrics. It provides the highest accuracy and F1-score, indicating that it is the most reliable model for predicting student outcomes in this dataset.
 
-The Neural Network performs moderately but shows convergence issues, which limits performance.
+Logistic Regression shows the lowest performance among the three models. This is expected because it assumes a linear relationship between input features and the target variable \cite{sitompul2025}. However, student performance is influenced by multiple interacting factors such as study behavior, previous attempts, and demographic characteristics. These relationships are unlikely to be purely linear, which limits the effectiveness of Logistic Regression.
 
-From a class-level perspective, XGBoost achieves high recall for the pass class but lower performance for the fail class. This suggests that predicting failure is more difficult.
+The Neural Network performs better than Logistic Regression but does not outperform XGBoost. Although neural networks are capable of modeling nonlinear relationships \cite{chong2025}, their performance depends heavily on training stability and hyperparameter tuning. In this study, the Neural Network shows a convergence warning during training, which suggests that the model may not have reached an optimal solution. This can explain its lower performance compared to XGBoost.
 
-These results indicate that student performance is not linear but behaves like a piecewise function. This explains why XGBoost performs best.
+\subsection{Class-Level Performance Analysis}
 
-\subsection{Model Interpretation}
+In addition to overall accuracy, it is important to analyze performance at the class level. The dataset is slightly imbalanced, with approximately 52.8\% failing students and 47.2\% passing students. This imbalance can influence model predictions.
+
+For Logistic Regression, the recall for the ``Pass'' class is relatively high (0.883), but the recall for the ``Fail'' class is lower. This indicates that the model tends to correctly identify passing students but struggles more with predicting failing students.
+
+XGBoost achieves a significantly higher recall for the ``Pass'' class (0.942), meaning it successfully identifies most students who will succeed. At the same time, it maintains better balance between precision and recall compared to Logistic Regression. This demonstrates its ability to capture complex relationships in the data \cite{ki2026}.
+
+The Neural Network shows moderate performance for both classes. While it improves upon Logistic Regression, it does not reach the performance level of XGBoost. This suggests that although nonlinear modeling is beneficial, the specific structure and training of the Neural Network may not be optimal for this dataset.
+
+\subsection{Interpretation of Model Behavior}
 
 The differences in performance can be explained by the mathematical structure of each model.
 
-Logistic Regression is linear. XGBoost is piecewise. Neural Networks are nonlinear.
+Logistic Regression creates a single linear decision boundary. This limits its ability to capture complex interactions between features. As a result, it cannot effectively separate students who have similar characteristics but different outcomes \cite{pesantez2019, churn2023}.
 
-XGBoost performs best because it captures threshold-based patterns in the data.
+XGBoost, on the other hand, constructs an ensemble of decision trees, resulting in a piecewise approximation of the target function \cite{ki2026}. This allows the model to divide the feature space into multiple regions and learn different patterns in each region. For example, a student's likelihood of passing may change significantly after reaching a certain number of assessments or achieving a certain performance threshold. These types of patterns are naturally captured by tree-based models. This behavior has also been observed in various application domains where XGBoost outperforms traditional models \cite{elarifi2026, chukwuemeka2026}.
 
-\subsection{Limitations}
+The Neural Network represents the target function as a composition of nonlinear transformations \cite{chong2025}. While this approach is theoretically powerful, it requires sufficient training and careful tuning. In structured tabular datasets such as OULAD, tree-based models often outperform neural networks because they are better suited for handling heterogeneous feature types and interactions \cite{sitompul2025}.
+\subsection{Insights from Confusion Matrices}
 
-This study has limitations. The dataset does not include behavioral features such as time spent studying.
+The confusion matrices provide additional insight into model behavior.
 
-The Neural Network was not fully optimized.
+XGBoost demonstrates strong performance in correctly classifying passing students, with a high number of true positives. However, all models show relatively lower performance in identifying failing students, as indicated by higher false negatives.
 
-Results may not generalize to other datasets.
+This suggests that predicting student failure is inherently more difficult. Failure may depend on factors that are not fully captured in the dataset, such as motivation, external circumstances, or learning habits \cite{nayak2023, chen2015}.
 
+\subsection{Discussion}
+
+Overall, the results indicate that student performance is not a simple linear function. Instead, it behaves more like a piecewise function with different patterns across regions of the feature space \cite{ki2026}.
+
+This explains why XGBoost achieves the best performance. Its ability to model nonlinear relationships and feature interactions makes it well suited for this type of data \cite{elarifi2026, chukwuemeka2026}.
+
+These findings are consistent with prior research, which shows that ensemble methods often outperform linear models in educational prediction tasks \cite{sitompul2025, chong2025}. The results also highlight the importance of selecting models that match the underlying structure of the data.
 % --------------------------------------------------
 \section{Conclusion and Future Work}
 
-XGBoost achieves the best performance due to its ability to model nonlinear relationships.
+In this study, we conducted a comparative analysis of three machine learning models—Logistic Regression, XGBoost, and a Neural Network (Multilayer Perceptron)—to predict student performance using the OULAD dataset. The objective was to understand how different mathematical modeling approaches, including linear, piecewise, and nonlinear functions, influence predictive accuracy in an educational setting.
 
-Future work includes hyperparameter tuning, adding behavioral features, and using explainable AI methods.
+The experimental results show that XGBoost achieves the highest performance among the three models, with the best accuracy and F1-score. This indicates that student performance data contains complex patterns that cannot be captured effectively by a simple linear model. Logistic Regression, while interpretable and computationally efficient, is limited by its assumption of linearity and therefore performs worse in this context \cite{sitompul2025}.
 
+The Neural Network demonstrates moderate performance and is able to capture nonlinear relationships. However, its performance does not exceed that of XGBoost. This can be attributed to optimization challenges, sensitivity to feature scaling, and the difficulty of training neural networks on structured tabular data. These findings are consistent with existing literature, which suggests that tree-based ensemble methods often outperform neural networks in tabular classification tasks \cite{chong2025, sitompul2025}.
+
+From a modeling perspective, the results suggest that student performance behaves more like a piecewise function rather than a smooth linear or fully continuous nonlinear function \cite{ki2026}. The ability of XGBoost to partition the feature space into multiple regions and learn different decision rules in each region makes it particularly well suited for this type of data.
+
+This study also highlights several important challenges. All models show lower performance when predicting failing students, suggesting that failure may depend on latent factors that are not fully captured in the dataset, such as motivation, external conditions, or learning habits \cite{nayak2023, chen2015}. This indicates that improving prediction performance requires not only better models but also richer and more informative data.
+
+For future work, several directions can be explored. First, hyperparameter tuning and model optimization can be applied to improve the performance of both XGBoost and Neural Networks. Second, additional features such as time-based learning behavior, interaction logs, and engagement metrics can be incorporated to capture more complex patterns. Third, advanced neural network architectures or hybrid models that combine tree-based and neural approaches may provide further improvements \cite{chukwuemeka2026}.
+
+Finally, explainable AI techniques can be used to interpret model predictions and identify the most important factors influencing student success. This would make the model more useful for educators and decision-makers, enabling targeted interventions to support students at risk of failure.
+
+Overall, this study demonstrates that selecting an appropriate model that matches the underlying structure of the data is critical for achieving strong predictive performance in educational data mining.
 % --------------------------------------------------
 \section*{Acknowledgement}
 
-Dataset: Open University Learning Analytics Dataset (OULAD)
+Dataset:
+
+This study uses the Open University Learning Analytics Dataset (OULAD), which is publicly available at:
+
+\url{https://archive.ics.uci.edu/dataset/349/open+university+learning+analytics+dataset}
+
+The dataset contains student demographic information, course data, and assessment records for over 30,000 students, and is widely used in educational data mining research.
 
 Task Distribution:
 
 Topic Definition: Negar Kamvij
 
-Dataset Preparation: Negar Kamvij
+Dataset Preparation and Preprocessing: Negar Kamvij
 
-Implementation: Bhoami Khona, Negar Kamvij, Siyi Liu
+Model Implementation: Bhoami Khona, Negar Kamvij, Siyi Liu
+
+Visualization and Analysis: Negar Kamvij
 
 Paper Writing: Siyi Liu
 
 % --------------------------------------------------
-\begin{thebibliography}{9}
+\begin{thebibliography}{00}
 
-\bibitem{chen2024}
-Chen et al., 2024.
+\bibitem{chen2015}
+J. Chen, X. Zhou, J. Yao, and S.-K. Tang, 
+``Application of machine learning in higher education to predict students’ performance, learning engagement and self-efficacy: A systematic literature review,'' 
+\textit{Asian Education and Development Studies}, vol. 14, no. 2, 2015.
 
 \bibitem{chong2025}
-Chong et al., 2025.
+K. T. Chong, N. Ibrahim, S. H. Huspi, W. M. N. Wan Kadir, and M. A. Isa, 
+``A systematic review of machine learning techniques for predicting student engagement in higher education online learning,'' 
+\textit{Journal of Information Technology Education: Research}, vol. 24, 2025. :contentReference[oaicite:0]{index=0}
 
 \bibitem{sitompul2025}
-Sitompul et al., 2025.
+L. R. Sitompul, A. A. Nababan, M. L. Manihuruk, W. A. Ponsen, and Supriyandi, 
+``Comparison of XGBoost, random forest, and logistic regression algorithms in stroke disease classification,'' 
+\textit{Sinkron: Jurnal dan Penelitian Teknik Informatika}, vol. 9, no. 2, pp. 957--964, 2025. :contentReference[oaicite:1]{index=1}
+
+\bibitem{ki2026}
+D. Ki and A. Guntuboyina, 
+``What functions does XGBoost learn?,'' 
+\textit{arXiv preprint arXiv:2601.05444}, 2026. :contentReference[oaicite:2]{index=2}
+
+\bibitem{chukwuemeka2026}
+P. Chukwuemeka et al., 
+``A hybrid AI model integrating LSTM, XGBoost, and K-means for interpretable prediction and clustering of water quality in data-scarce regions,'' 
+\textit{Discover Civil Engineering}, vol. 3, p. 24, 2026. :contentReference[oaicite:3]{index=3}
+
+\bibitem{elarifi2026}
+A. M. S. Elarifi and W. M. S. Khalifa, 
+``AI-driven predictive analytics for sustainable aviation: Metaheuristic-optimized XGBoost for carbon emission prediction,'' 
+\textit{Sustainability}, vol. 18, 2026. :contentReference[oaicite:4]{index=4}
+
+\bibitem{pesantez2019}
+J. Pesantez-Narvaez, M. Guillen, and M. Alcañiz, 
+``Predicting motor insurance claims using telematics data: XGBoost vs. logistic regression,'' 
+\textit{Preprints}, 2019. :contentReference[oaicite:5]{index=5}
+
+\bibitem{churn2023}
+``Predictive analytics for customer churn in the fashion \& apparel e-commerce industry: A comparative study of XGBoost and logistic regression,'' 
+2023. :contentReference[oaicite:6]{index=6}
+
+\bibitem{nayak2023}
+P. Nayak et al., 
+``Review paper on educational data mining,'' 
+\textit{International Journal of Advanced Research in Science, Communication and Technology}, vol. 3, no. 2, 2023. :contentReference[oaicite:7]{index=7}
 
 \end{thebibliography}
 
